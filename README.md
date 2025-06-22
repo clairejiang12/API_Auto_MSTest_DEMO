@@ -6,17 +6,17 @@ API_Auto_MSTest_DEMO is a .NET 8 automated API testing project using MSTest as t
 
 ## Code Structure
 API_Auto_MSTest_DEMO/  
-  API_Auto_DEMO/  
-    lib/  
-      request.cs         # HTTP request helper methods (GET, POST, PUT, DELETE)  
-       response.cs        # Response logging and deserialization helpers  
-    postTest.cs            # POST API test cases  
-       putTest.cs             # PUT API test cases  
-       deleteTest.cs          # DELETE API test cases  
-       getSingleTest.cs       # GET single item test cases  
-       getAllTest.cs          # GET all items test cases  
-       API_Auto_DEMO.csproj   # Project file with dependencies  
-  README.md  
+&nbsp;API_Auto_DEMO/  
+&nbsp;lib/  
+&nbsp;&nbsp;request.cs         # HTTP request helper methods (GET, POST, PUT, DELETE)  
+&nbsp;&nbsp;response.cs        # Response logging and deserialization helpers  
+&nbsp;postTest.cs            # POST API test cases  
+&nbsp;&nbsp;putTest.cs             # PUT API test cases  
+&nbsp;&nbsp;deleteTest.cs          # DELETE API test cases  
+&nbsp;&nbsp;getSingleTest.cs       # GET single item test cases  
+&nbsp;&nbsp; getAllTest.cs          # GET all items test cases  
+&nbsp;&nbsp;API_Auto_DEMO.csproj   # Project file with dependencies  
+&nbsp;README.md  
 ## Dependencies
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
