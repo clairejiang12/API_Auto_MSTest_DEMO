@@ -5,18 +5,15 @@
 API_Auto_MSTest_DEMO is a .NET 8 automated API testing project using MSTest as the test framework. It demonstrates how to perform integration tests for a RESTful API (such as a TodoItems API) with reusable HTTP request helpers, response validation, and strong-typed assertions. The project leverages FluentAssertions for expressive assertions and Newtonsoft.Json for JSON serialization/deserialization.
 
 ## Code Structure
-API_Auto_MSTest_DEMO/  
-&nbsp;API_Auto_DEMO/  
-&nbsp;lib/  
-&nbsp;&nbsp;request.cs         # HTTP request helper methods (GET, POST, PUT, DELETE)  
-&nbsp;&nbsp;response.cs        # Response logging and deserialization helpers  
-&nbsp;postTest.cs            # POST API test cases  
-&nbsp;&nbsp;putTest.cs             # PUT API test cases  
-&nbsp;&nbsp;deleteTest.cs          # DELETE API test cases  
-&nbsp;&nbsp;getSingleTest.cs       # GET single item test cases  
-&nbsp;&nbsp; getAllTest.cs          # GET all items test cases  
-&nbsp;&nbsp;API_Auto_DEMO.csproj   # Project file with dependencies  
-&nbsp;README.md  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/ib/request.cs  # HTTP request helper methods (GET, POST, PUT, DELETE)  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/ib/response.cs # Response logging and deserialization helpers  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/postTest.cs            # POST API test cases  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/putTest.cs             # PUT API test cases  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/deleteTest.cs          # DELETE API test cases  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/getSingleTest.cs       # GET single item test cases  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/getAllTest.cs          # GET all items test cases  
+API_Auto_MSTest_DEMO/API_Auto_DEMO/API_Auto_DEMO.csproj   # Project file with dependencies  
+
 ## Dependencies
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
