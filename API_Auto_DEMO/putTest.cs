@@ -1,26 +1,23 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.Common.DataCollection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RequestMethodLibrary;
 using System;
+using System.Net;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace APIAutoTestPut
 {
-
     [TestClass]
     public class APITestPut
     {
         HttpClient httpClient = new HttpClient();
         string postURL = "api/TodoItems";
         string putURL = "api/TodoItems/";
+        string getURL = "api/TodoItems/";
         private int id = 0;
-        private object? res = null;
         public TestContext TestContext { get; set; }
-
 
         [TestMethod]
         [Description("Put with valid payload")]
@@ -29,36 +26,34 @@ namespace APIAutoTestPut
             // insert an item to update
             var jsonData = "{ \"name\": \"TestPut\",\"isComplete\": true}";
             var result = await RequestMethodClass.PostAsync(httpClient, postURL, jsonData, true);
-            TestContext.WriteLine($"Status Code: {result.StatusCode}");
-            TestContext.WriteLine($"Response Body: {result.ResponseBody}");
-            dynamic? actual = JsonConvert.DeserializeObject(result.ResponseBody!);
-            if (actual == null)
-            {
-                Assert.Fail("Deserialized object is null");
-            }
+            ResponseHelper.LogResult(TestContext, result.StatusCode.ToString(), result.ResponseBody);
+            var actual = ResponseHelper.AssertAndDeserialize<dynamic>(result.ResponseBody);
             id = actual.id ?? 0;
 
             //Test Put API
-            var putPayload = "{ \"name\": \"TestPutNew\",\"isComplete\": false}";
-
-            //Call PutAsync method from RequestMethodClass
+            var putPayload = $"{{ \"id\": {id}, \"name\": \"TestPutNew\", \"isComplete\": false }}";
             var putResponse = await RequestMethodClass.PutAsync(httpClient, putURL + id, putPayload, true);
-            TestContext.WriteLine($"Status Code: {putResponse.StatusCode}");
-            TestContext.WriteLine($"Response Body: {putResponse.ResponseBody}");
+            ResponseHelper.LogResult(TestContext, putResponse.StatusCode.ToString(), putResponse.ResponseBody);
+            putResponse.StatusCode.Should().Be(HttpStatusCode.NoContent); // 204
 
-            // Assert
-            if (string.IsNullOrEmpty(putResponse.ResponseBody))
-            {
-                Assert.Fail("ResponseBody is null or empty");
-            }
-            dynamic? actualPut = JsonConvert.DeserializeObject(putResponse.ResponseBody!);
-            if (actualPut == null)
-            {
-                Assert.Fail("Deserialized object is null");
-            }
-            res = actualPut;
-            ((string?)actualPut.name).Should().Be("TestPutNew");
-            ((bool?)actualPut.isComplete).Should().BeFalse();
+            //verify the updated item correct
+            var getResult = await RequestMethodClass.GetAsync(httpClient, getURL + id, true);
+            ResponseHelper.LogResult(TestContext, getResult.StatusCode.ToString(), getResult.ResponseBody);
+            getResult.ResponseBody.Should().NotBeNullOrEmpty();
+            var getActual = ResponseHelper.AssertAndDeserialize<dynamic>(getResult.ResponseBody);
+            ((string?)getActual.name).Should().Be("TestPutNew");
+            ((bool?)getActual.isComplete).Should().BeFalse();
+        }
+
+        [TestMethod]
+        [Description("Put with invalid payload and check failed")]
+        public async Task Test_Put_Invalid()
+        {
+            // Arrange
+            var jsonData = "{\"name\": \"TestPutInvalid\",\"isComplete\": true}";
+            var result = await RequestMethodClass.PutAsync(httpClient, putURL + id, jsonData, false);
+            ResponseHelper.LogResult(TestContext, result.StatusCode.ToString(), result.ResponseBody);
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound); // 404
         }
     }
 }

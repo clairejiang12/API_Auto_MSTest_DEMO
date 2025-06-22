@@ -1,16 +1,13 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.Common.DataCollection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RequestMethodLibrary;
 using System;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace APIAutoTestGetSingle
 {
-
     [TestClass]
     public class APITestGetSingle
     {
@@ -21,7 +18,6 @@ namespace APIAutoTestGetSingle
         private object? res = null;
         public TestContext TestContext { get; set; }
 
-
         [TestMethod]
         [Description("Get by Id and check success")]
         public async Task Test_Get_By_Id_Valid()
@@ -29,31 +25,15 @@ namespace APIAutoTestGetSingle
             // insert an item to get
             var jsonData = "{ \"name\": \"TestGet\",\"isComplete\": true}";
             var result = await RequestMethodClass.PostAsync(httpClient, postURL, jsonData, true);
-            TestContext.WriteLine($"Status Code: {result.StatusCode}");
-            TestContext.WriteLine($"Response Body: {result.ResponseBody}");
-            dynamic? actual = JsonConvert.DeserializeObject(result.ResponseBody!);
-            if (actual == null)
-            {
-                Assert.Fail("Deserialized object is null");
-            }
+            ResponseHelper.LogResult(TestContext, result.StatusCode.ToString(), result.ResponseBody);
+            var actual = ResponseHelper.AssertAndDeserialize<dynamic>(result.ResponseBody);
             id = actual.id ?? 0;
 
             //Test Get Single API
             var getResult = await RequestMethodClass.GetAsync(httpClient, getURL + id, true);
-            TestContext.WriteLine($"Status Code: {getResult.StatusCode}");
-            TestContext.WriteLine($"Response Body: {getResult.ResponseBody}");
-
-            // Assert
+            ResponseHelper.LogResult(TestContext, getResult.StatusCode.ToString(), getResult.ResponseBody);
             getResult.ResponseBody.Should().NotBeNullOrEmpty();
-            if (string.IsNullOrEmpty(getResult.ResponseBody))
-            {
-                Assert.Fail("ResponseBody is null or empty");
-            }
-            dynamic? getActual = JsonConvert.DeserializeObject(getResult.ResponseBody!);
-            if (getActual == null)
-            {
-                Assert.Fail("Deserialized object is null");
-            }
+            var getActual = ResponseHelper.AssertAndDeserialize<dynamic>(getResult.ResponseBody);
             ((string?)getActual.name).Should().Be("TestGet");
             ((bool?)getActual.isComplete).Should().BeTrue();
         }
@@ -62,24 +42,11 @@ namespace APIAutoTestGetSingle
         [Description("Get by not exit id and check error")]
         public async Task Test_Get_By_Id_Not_Exist()
         {
-            var result = await RequestMethodClass.GetAsync(httpClient, getURL + id, false);
-            TestContext.WriteLine($"Status Code: {result.StatusCode}");
-            TestContext.WriteLine($"Response Body: {result.ResponseBody}");
-
-            // Assert
+            var result = await RequestMethodClass.GetAsync(httpClient, getURL + "11212121212", false);
+            ResponseHelper.LogResult(TestContext, result.StatusCode.ToString(), result.ResponseBody);
             result.ResponseBody.Should().NotBeNullOrEmpty();
-            if (string.IsNullOrEmpty(result.ResponseBody))
-            {
-                Assert.Fail("ResponseBody is null or empty");
-            }
-            dynamic? actual = JsonConvert.DeserializeObject(result.ResponseBody!);
-            if (actual == null)
-            {
-                Assert.Fail("Deserialized object is null");
-            }
-            actual.status.Should().Be(404);
+            var jobj = JObject.Parse(result.ResponseBody!);
+            jobj["status"]!.Value<int>().Should().Be(404);
         }
-
     }
-
 }

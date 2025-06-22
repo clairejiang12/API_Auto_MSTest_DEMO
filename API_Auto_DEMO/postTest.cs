@@ -5,20 +5,26 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RequestMethodLibrary;
 using System;
+using System.Net;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace APIAutoTestPost
 {
-        [TestClass]
+    public class TodoItem
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public bool isComplete { get; set; }
+    }
+
+    [TestClass]
     public class APITestPost
     {
-        HttpClient httpClient = new HttpClient();
+        private static readonly HttpClient httpClient = new HttpClient();
         string postURL = "api/TodoItems";
         private int id = 0;
-        private object? res = null;
+        private TodoItem? res = null;
         public TestContext TestContext { get; set; }
-
 
         [TestMethod]
         [Description("POST with valid payload and check success")]
@@ -28,37 +34,14 @@ namespace APIAutoTestPost
             var jsonData = "{ \"name\": \"TestPost\",\"isComplete\": true}";
 
             var result = await RequestMethodClass.PostAsync(httpClient, postURL, jsonData, true);
-            TestContext.WriteLine($"Status Code: {result.StatusCode}");
-            TestContext.WriteLine($"Response Body: {result.ResponseBody}");
+            ResponseHelper.LogResult(TestContext, result.StatusCode.ToString(), result.ResponseBody);
 
             // Assert
-            if (string.IsNullOrEmpty(result.ResponseBody))
-            {
-                Assert.Fail("ResponseBody is null or empty");
-            }
-            dynamic? actual = JsonConvert.DeserializeObject(result.ResponseBody!);
-            if (actual == null)
-            {
-                Assert.Fail("Deserialized object is null");
-            }
+            var actual = ResponseHelper.AssertAndDeserialize<TodoItem>(result.ResponseBody);
             res = actual;
-            id = actual.id ?? 0;
-            ((string?)actual.name).Should().Be("TestPost");
-            ((bool?)actual.isComplete).Should().BeTrue();
-        }
-
-
-        [TestMethod]
-        [Description("POST with invalid payload and check failed")]
-        public async Task Test_Post_Invalid()
-        {
-            // Arrange
-            var jsonData = "{\"isComplete\": true}";
-
-            //Call GetAsync method from RequestMethodClass
-            var result = await RequestMethodClass.PostAsync(httpClient, postURL, jsonData, false);
-            TestContext.WriteLine($"Status Code: {result.StatusCode}");
-            TestContext.WriteLine($"Response Body: {result.ResponseBody}");
+            id = actual.id;
+            actual.name.Should().Be("TestPost");
+            actual.isComplete.Should().BeTrue();
         }
 
         [TestMethod]
@@ -68,11 +51,9 @@ namespace APIAutoTestPost
             // Arrange
             var jsonData = "{ \"name\": \"TestPost\",\"isComplete\": \"aaa\"}";
 
-            //Call GetAsync method from RequestMethodClass
             var result = await RequestMethodClass.PostAsync(httpClient, postURL, jsonData, false);
-            TestContext.WriteLine($"Status Code: {result.StatusCode}");
-            TestContext.WriteLine($"Response Body: {result.ResponseBody}");
-
+            ResponseHelper.LogResult(TestContext, result.StatusCode.ToString(), result.ResponseBody);
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
             if (string.IsNullOrEmpty(result.ResponseBody))
             {
                 Assert.Fail("ResponseBody is null or empty");
