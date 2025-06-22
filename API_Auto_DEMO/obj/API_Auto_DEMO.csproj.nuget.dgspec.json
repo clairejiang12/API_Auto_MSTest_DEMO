@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[8.3.0, )"
+            },
             "MSTest": {
               "target": "Package",
               "version": "[3.6.4, )"

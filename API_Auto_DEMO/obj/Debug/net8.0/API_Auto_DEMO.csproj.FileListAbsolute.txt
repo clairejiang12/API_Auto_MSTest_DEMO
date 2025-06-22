@@ -169,3 +169,4 @@ C:\Users\poke_\Desktop\API_Auto_MSTest_DEMO\API_Auto_DEMO\obj\Debug\net8.0\refin
 C:\Users\poke_\Desktop\API_Auto_MSTest_DEMO\API_Auto_DEMO\obj\Debug\net8.0\API_Auto_DEMO.pdb
 C:\Users\poke_\Desktop\API_Auto_MSTest_DEMO\API_Auto_DEMO\obj\Debug\net8.0\API_Auto_DEMO.genruntimeconfig.cache
 C:\Users\poke_\Desktop\API_Auto_MSTest_DEMO\API_Auto_DEMO\obj\Debug\net8.0\ref\API_Auto_DEMO.dll
+C:\Users\poke_\Desktop\API_Auto_MSTest_DEMO\API_Auto_DEMO\bin\Debug\net8.0\FluentAssertions.dll
