@@ -51,7 +51,3 @@ All dependencies are managed via NuGet and specified in `API_Auto_DEMO.csproj`.
 - The project uses MSTest attributes (`[TestClass]`, `[TestMethod]`) for test discovery.
 - Helper methods for logging and deserialization are in `lib/response.cs` for code reuse.
 - FluentAssertions is used for readable and maintainable assertions.
-
----
-
-Feel free to further customize this README for your team or CI/CD environment!
