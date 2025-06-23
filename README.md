@@ -40,7 +40,7 @@ All dependencies are managed via NuGet and specified in `API_Auto_DEMO.csproj`.
    ``dotnet build API_Auto_DEMO``
 3. **Run the tests**  
    Result mode  
-   ``dotnet test API_Auto_DEMO``
+   ``dotnet test API_Auto_DEMO``  
    Details mode with console  
    ``dotnet test --logger:"console;verbosity=detailed``  
    This will execute all test cases in the project and output the results.
