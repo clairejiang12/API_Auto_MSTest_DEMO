@@ -17,7 +17,7 @@ namespace APIAutoTestPost
         public bool isComplete { get; set; }
     }
 
-    [TestClass]
+        [TestClass]
     public class APITestPost
     {
         private static readonly HttpClient httpClient = new HttpClient();

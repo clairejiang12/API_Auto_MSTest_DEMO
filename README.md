@@ -32,17 +32,17 @@ All dependencies are managed via NuGet and specified in `API_Auto_DEMO.csproj`.
 
 ## How to Execute
 
-1. **Clone the repository**  
-    ``git clone git@github.com:clairejiang12/API_Auto_MSTest_DEMO.git``
+1. **Clone the repository**   
+    ``git clone git@github.com:clairejiang12/API_Auto_MSTest_DEMO.git``  
 
     ``cd API_Auto_MSTest_DEMO``
-2. **Build the project**  
+2. **Build the project**   
    ``dotnet build API_Auto_DEMO``
 3. **Run the tests**  
-   Result mode 
+   Result mode  
    ``dotnet test API_Auto_DEMO``
-   Details mode with console
-   ``dotnet test --logger:"console;verbosity=detailed``
+   Details mode with console  
+   ``dotnet test --logger:"console;verbosity=detailed``  
    This will execute all test cases in the project and output the results.
 
 ## Notes
